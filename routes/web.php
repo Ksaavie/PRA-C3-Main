@@ -11,7 +11,6 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 Route::get('/toernooien', [TournamentController::class, 'index'])->name('toernooien');
-Route::get('/tournaments/{tournament}', [TournamentController::class, 'show'])->name('tournaments.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,10 +29,13 @@ Route::middleware('auth')->group(function () {
             return view('admin.index');
         });
         
-        // Tournament management (admin only)
+        // Tournament management (admin only) - must be before /tournaments/{tournament} route
         Route::get('/tournaments/create', [TournamentController::class, 'create'])->name('tournaments.create');
         Route::post('/tournaments', [TournamentController::class, 'store'])->name('tournaments.store');
     });
 });
+
+// Tournament show route - must be after /tournaments/create to avoid route conflict
+Route::get('/tournaments/{tournament}', [TournamentController::class, 'show'])->name('tournaments.show');
 
 require __DIR__.'/auth.php';
