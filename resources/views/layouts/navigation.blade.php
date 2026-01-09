@@ -9,6 +9,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('toernooien')" :active="request()->routeIs('toernooien')">
+                        {{ __('toernooien') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -32,6 +35,14 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
+
+                        @auth
+                            @if(Auth::user()->admin)
+                                <x-dropdown-link :href="route('tournaments.create')">
+                                    {{ __('Maak toernooi aan') }}
+                                </x-dropdown-link>
+                            @endif
+                        @endauth
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -77,6 +88,9 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('toernooien')" :active="request()->routeIs('toernooien')">
+                {{ __('toernooien') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -91,6 +105,12 @@
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
+
+                @if(Auth::user()->admin)
+                    <x-responsive-nav-link :href="route('tournaments.create')">
+                        {{ __('Maak toernooi aan') }}
+                    </x-responsive-nav-link>
+                @endif
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
@@ -110,6 +130,9 @@
                 <x-responsive-nav-link :href="route('login')">
                     {{ __('Log in') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('toernooien')" :active="request()->routeIs('toernooien')">
+                    {{ __('toernooien') }}
+                </x-responsive-nav-link>
                 @if (Route::has('register'))
                 <x-responsive-nav-link :href="route('register')">
                     {{ __('Register') }}
@@ -120,3 +143,4 @@
         @endauth
     </div>
 </nav>
+

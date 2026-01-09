@@ -40,6 +40,11 @@ class Team extends Model
     {
         return $this->hasMany(MatchModel::class, 'team2_id');
     }
+
+    public function tournaments()
+    {
+        return $this->belongsToMany(Tournament::class, 'tournament_team');
+    }
 }
 
 
