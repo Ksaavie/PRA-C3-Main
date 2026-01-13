@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349
+class ComposerStaticInit07054ce887608878632b5b8b8a383c55
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -214,8 +214,8 @@ class ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'Whoops\\' => 
         array (
@@ -379,8 +379,8 @@ class ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+            1 => __DIR__ . '/..' . '/psr/http-factory/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -461,8 +461,8 @@ class ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349
         ),
         'League\\Uri\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/uri',
-            1 => __DIR__ . '/..' . '/league/uri-interfaces',
+            0 => __DIR__ . '/..' . '/league/uri-interfaces',
+            1 => __DIR__ . '/..' . '/league/uri',
         ),
         'League\\MimeTypeDetection\\' => 
         array (
@@ -628,12 +628,14 @@ class ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
         'App\\Http\\Controllers\\TeamController' => __DIR__ . '/../..' . '/app/Http/Controllers/TeamController.php',
+        'App\\Http\\Controllers\\TournamentController' => __DIR__ . '/../..' . '/app/Http/Controllers/TournamentController.php',
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
         'App\\Models\\Goal' => __DIR__ . '/../..' . '/app/Models/Goal.php',
         'App\\Models\\MatchModel' => __DIR__ . '/../..' . '/app/Models/MatchModel.php',
         'App\\Models\\Team' => __DIR__ . '/../..' . '/app/Models/Team.php',
+        'App\\Models\\Tournament' => __DIR__ . '/../..' . '/app/Models/Tournament.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
@@ -7740,9 +7742,9 @@ class ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd8176b6d2bab8357f0f356f9664e5349::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit07054ce887608878632b5b8b8a383c55::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit07054ce887608878632b5b8b8a383c55::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit07054ce887608878632b5b8b8a383c55::$classMap;
 
         }, null, ClassLoader::class);
     }

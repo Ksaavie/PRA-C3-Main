@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
     
     // Team registration for tournaments
     Route::post('/tournaments/{tournament}/register', [TournamentController::class, 'registerTeam'])->name('tournaments.register');
+    Route::post('/tournaments/{tournament}/register-team', [TournamentController::class, 'registerTeamFromList'])->name('tournaments.register-team');
     Route::post('/tournaments/{tournament}/unregister', [TournamentController::class, 'unregisterTeam'])->name('tournaments.unregister');
     
     Route::middleware('admin')->group(function () {
