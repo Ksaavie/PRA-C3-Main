@@ -2,49 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Team extends Model
 {
-    use HasFactory;
-
-    public $timestamps = false;
+    protected $table = 'teams';
 
     protected $fillable = [
         'name',
-        'points',
+        'description',
         'creator_id',
+        'players',
     ];
 
+    // players opgeslagen als JSON, cast naar array
     protected $casts = [
-        'points' => 'integer',
+        'players' => 'array',
     ];
 
+    /**
+     * Optionele helper: get players count attribute
+     */
+    public function getPlayersCountAttribute()
+    {
+        return is_array($this->players) ? count($this->players) : 0;
+    }
+
+    // Relaties (bv. creator)
     public function creator()
     {
-        return $this->belongsTo(User::class, 'creator_id');
-    }
-
-    public function players()
-    {
-        return $this->hasMany(User::class);
-    }
-
-    public function homeMatches()
-    {
-        return $this->hasMany(MatchModel::class, 'team1_id');
-    }
-
-    public function awayMatches()
-    {
-        return $this->hasMany(MatchModel::class, 'team2_id');
-    }
-
-    public function tournaments()
-    {
-        return $this->belongsToMany(Tournament::class, 'tournament_team');
+        return $this->belongsTo(\App\Models\User::class, 'creator_id');
     }
 }
-
-

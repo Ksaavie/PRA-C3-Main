@@ -50,7 +50,8 @@
                             {{ __('Toernooi aanmaken') }}
                         </x-primary-button>
 
-                        <a href="{{ route('toernooien') }}" class="text-gray-600 hover:text-gray-800">
+                        <a href="{{ route('toernooien.index') }}" class="text-gray-600 hover:text-gray-800">
+
                             Annuleren
                         </a>
                     </div>

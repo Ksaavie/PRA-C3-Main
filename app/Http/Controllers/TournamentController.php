@@ -49,7 +49,7 @@ class TournamentController extends Controller
 
         Tournament::create($validated);
 
-        return redirect()->route('toernooien')->with('status', 'Toernooi aangemaakt.');
+        return redirect()->route('tournaments.create')->with('status', 'Toernooi aangemaakt.');
     }
 
     /**
@@ -57,7 +57,7 @@ class TournamentController extends Controller
      */
     public function show(Tournament $tournament): View
     {
-        $tournament->load('teams.creator');
+        $tournament->load('teams.creator', 'matches.homeTeam', 'matches.awayTeam');
         $userTeam = Auth::check() ? Auth::user()->team : null;
         $isRegistered = $userTeam && $tournament->teams->contains($userTeam);
 
@@ -70,7 +70,7 @@ class TournamentController extends Controller
     public function registerTeam(Request $request, Tournament $tournament): RedirectResponse
     {
         $user = Auth::user();
-        
+
         if (!$user->team) {
             return redirect()->route('tournaments.show', $tournament)
                 ->with('error', 'Je hebt geen team. Maak eerst een team aan.');
@@ -102,7 +102,7 @@ class TournamentController extends Controller
     public function unregisterTeam(Request $request, Tournament $tournament): RedirectResponse
     {
         $user = Auth::user();
-        
+
         if (!$user->team) {
             return redirect()->route('tournaments.show', $tournament)
                 ->with('error', 'Je hebt geen team.');
@@ -155,5 +155,71 @@ class TournamentController extends Controller
 
         return redirect()->route('toernooien')
             ->with('status', "Team '{$team->name}' succesvol ingeschreven voor '{$tournament->name}'.");
+    }
+
+    /**
+     * Generate tournament schedule
+     */
+    public function generateSchedule(Request $request, Tournament $tournament): RedirectResponse
+    {
+        $validated = $request->validate([
+            'num_fields' => ['required', 'integer', 'min:1'],
+        ]);
+
+        $teams = $tournament->teams()->get();
+        $numTeams = $teams->count();
+
+        if ($numTeams < 2) {
+            return redirect()->route('tournaments.show', $tournament)
+                ->with('error', 'Er zijn minimaal 2 teams nodig om een schema te genereren.');
+        }
+
+        // Check if schedule already exists
+        if ($tournament->matches()->exists()) {
+            return redirect()->route('tournaments.show', $tournament)
+                ->with('error', 'Er bestaat al een schema voor dit toernooi.');
+        }
+
+        $matches = [];
+        $numFields = $validated['num_fields'];
+
+        // Generate round-robin schedule (each team plays every other team once)
+        $allMatches = [];
+        for ($i = 0; $i < $numTeams; $i++) {
+            for ($j = $i + 1; $j < $numTeams; $j++) {
+                $allMatches[] = [
+                    'team1_id' => $teams[$i]->id,
+                    'team2_id' => $teams[$j]->id,
+                ];
+            }
+        }
+
+        // Schedule matches in time slots based on number of fields
+        $timeSlot = 1;
+        $matchIndex = 0;
+        while ($matchIndex < count($allMatches)) {
+            $matchesInSlot = min($numFields, count($allMatches) - $matchIndex);
+
+            for ($field = 1; $field <= $matchesInSlot; $field++) {
+                $match = $allMatches[$matchIndex];
+                $matches[] = [
+                    'team1_id' => $match['team1_id'],
+                    'team2_id' => $match['team2_id'],
+                    'field' => 'Veld ' . $field,
+                    'time' => 'Tijdslot ' . $timeSlot,
+                    'referee_id' => null,
+                ];
+                $matchIndex++;
+            }
+            $timeSlot++;
+        }
+
+        // Create matches in database
+        foreach ($matches as $matchData) {
+            $tournament->matches()->create($matchData);
+        }
+
+        return redirect()->route('tournaments.show', $tournament)
+            ->with('status', 'Schema succesvol gegenereerd.');
     }
 }

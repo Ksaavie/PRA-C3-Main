@@ -50,11 +50,28 @@
                 </div>
 
                 @auth
+                    @if(Auth::user()->admin && $tournament->matches->isEmpty())
+                        <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <h2 class="text-xl font-semibold mb-4">Schema genereren</h2>
+                            <form method="POST" action="{{ route('tournaments.generate-schedule', $tournament) }}" class="space-y-4">
+                                @csrf
+                                <div>
+                                    <label for="num_fields" class="block text-sm font-medium text-gray-700">Aantal velden</label>
+                                    <input type="number" id="num_fields" name="num_fields" min="1" required
+                                           class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <x-primary-button type="submit">
+                                    Schema genereren
+                                </x-primary-button>
+                            </form>
+                        </div>
+                    @endif
+
                     @if($userTeam)
                         <div class="mb-6 p-4 bg-gray-50 rounded-lg">
                             <h2 class="text-xl font-semibold mb-4">Team inschrijving</h2>
                             <p class="mb-2"><strong>Jouw team:</strong> {{ $userTeam->name }}</p>
-                            
+
                             @if($isRegistered)
                                 <p class="text-green-600 mb-4">✓ Je team is ingeschreven voor dit toernooi.</p>
                                 <form method="POST" action="{{ route('tournaments.unregister', $tournament) }}" class="inline">
@@ -109,6 +126,54 @@
                         </div>
                     @endif
                 </div>
+
+                @if($tournament->matches->isNotEmpty())
+                    <div class="mt-8">
+                        <h2 class="text-xl font-semibold mb-4">Wedstrijdschema - Bracket Systeem</h2>
+
+                        @php
+                            $timeSlots = $tournament->matches->groupBy('time');
+                        @endphp
+
+                        @foreach($timeSlots as $timeSlot => $matches)
+                            <div class="mb-8">
+                                <h3 class="text-lg font-semibold mb-4 bg-blue-100 p-3 rounded">{{ $timeSlot }}</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    @foreach($matches as $match)
+                                        <div class="bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
+                                            <div class="text-center mb-3">
+                                                <span class="text-sm text-gray-600">{{ $match->field }}</span>
+                                            </div>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                                    <span class="font-medium">{{ $match->homeTeam->name }}</span>
+                                                    <span class="text-sm">
+                                                        @if($match->team1_score !== null)
+                                                            {{ $match->team1_score }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                                <div class="text-center text-gray-400">vs</div>
+                                                <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                                                    <span class="font-medium">{{ $match->awayTeam->name }}</span>
+                                                    <span class="text-sm">
+                                                        @if($match->team2_score !== null)
+                                                            {{ $match->team2_score }}
+                                                        @else
+                                                            -
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     </div>
